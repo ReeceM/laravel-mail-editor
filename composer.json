@@ -40,5 +40,6 @@
                 "mailEclipse": "qoraiche\\mailEclipse\\Facades\\mailEclipse"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
 }
