@@ -47,14 +47,22 @@ Publish configuration file and public assets:
 php artisan vendor:publish --provider="qoraiche\mailEclipse\mailEclipseServiceProvider"
 ```
 
-## Usage
+## Documentation
 
-[![Package tutorial](https://i.imgur.com/sBCiFyt.png)](https://www.youtube.com/watch?v=QFgEGNBY3FI)
+### !!NOTE!! Maileclipse website is currently down, please check this youtube video (from author) for usage:
+
+https://www.youtube.com/watch?v=QFgEGNBY3FI&t=135s
 
 
-After setting up the package as described above, you can now access the application by visiting the `/maileclipse` route (considering the default url is `maileclipse` in the config file). You can modify it to whatever you want as per your needs.
+Documentation for Maileclipse can be found on the [Official website](https://maileclipse.io).
 
-![maileclipse-img](https://i.imgur.com/cWD5odh.png)
+## Community
+
+You can reach us at:
+
+- Spectrum chat: https://spectrum.chat/maileclipse
+- Slack: https://maileclipse.slack.com/
+
 
 ## Change log
 
@@ -84,6 +92,11 @@ __Contributions are welcome__
 * Add more email templates (HTML/Markdown).
 * Expand documentation pages.
 
+## Credits
+
+- [Yassine Qoraiche](https://github.com/qoraiche)
+- [All Contributors](../../contributors)
+
 ## Donate :heart:
 
 If you benefit from and/or like using MailEclipse then please help drive the future development of the project by 
@@ -93,8 +106,10 @@ If you benefit from and/or like using MailEclipse then please help drive the fut
 
 ### Donors list:
 
-1. **Snapt Systems Ltd** - (100,00 $ USD) - `Being used by one of our teams at Snapt!` - 11 April 2019
-2. **Corr Ex** - (2,00 $ USD) - 28 March 2019
-3. **WebArt Design** - (10,00 $ USD) - `Donation made with love by BuiltByPanda. com from Australia who support developers and their excellent work` - 28 March 2019
-4. **Flavius Borlovan** (6,99 $ USD) - `#teamcookie says HELLOO 🥳😉 Thanks for this really helpful Package (MailEclipse) bro. 😉💪🏽` - 12 March 2019
-5. **Maik Kasper** - (6,99 $ USD) - `We {teamcookie:github. com/flavius-constantin} 💥 love to support good developers and their awesome work! 🌪🔥` - 13 March 2019
+1. **Emprovise** - (20,00 $) - `You did a great job on MailEclipse! Thank you for providing this to everyone for free. I look forward to watching your project grow! Thanks Again, James S.` - 19 December 2019
+2. **Idearia Web Agency** - (40,00 €) - `Keep up the good work!` - 19 June 2019
+3. **Snapt Systems Ltd** - (100,00 $ USD) - `Being used by one of our teams at Snapt!` - 11 April 2019
+4. **Corr Ex** - (2,00 $ USD) - 28 March 2019
+5. **WebArt Design** - (10,00 $ USD) - `Donation made with love by BuiltByPanda. com from Australia who support developers and their excellent work` - 28 March 2019
+6. **Flavius Borlovan** (6,99 $ USD) - `#teamcookie says HELLOO 🥳😉 Thanks for this really helpful Package (MailEclipse) bro. 😉💪🏽` - 12 March 2019
+7. **Maik Kasper** - (6,99 $ USD) - `We {teamcookie:github. com/flavius-constantin} 💥 love to support good developers and their awesome work! 🌪🔥` - 13 March 2019

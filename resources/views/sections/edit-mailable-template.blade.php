@@ -36,8 +36,6 @@
 
      </style>
 
-     {{-- {{ dd($templateData) }} --}}
-
 <div class="col-lg-12 col-md-12">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -91,10 +89,54 @@
                         
 
                       <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                        <div class="p-2" style="border-top: 1px solid #ccc;">
+                        <div class="p-3" style="border-top: 1px solid #ccc;">
                         @foreach($templateData['view_data'] as $param)
-                                <span class="badge badge-secondary view_data_param mr-1" style="font-size: .84em;"><i class="fa fa-anchor mr-1" aria-hidden="true"></i>{{ $param }}</span>
-                        @endforeach
+
+                               @if (isset($param['data']['type']) && $param['data']['type'] === 'model')
+                                    <div class="btn-group dropright">
+                                      <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" maileclipse-data-toggle="tooltip" data-placement="top" title="Elequent Model">
+                                        <i class="fas fa-database mr-1"></i>{{ $param['key'] }}
+                                      </button>
+                                      <div class="dropdown-menu">
+
+                                        <!-- Dropdown menu links -->
+                                        @if ( !$param['data']['attributes']->isEmpty() )
+                                                <a class="dropdown-item view_data_param" param-key="{{ $param['key'] }}" href="#param">{{ $param['key'] }}</a>
+                                                <div class="dropdown-divider"></div>
+                                            @foreach( $param['data']['attributes'] as $key => $val )
+                                                <a class="dropdown-item is-attribute view_data_param" param-parent-key="{{ $param['key'] }}" param-key="{{ $key }}" href="#param">{{ $key }}</a>
+                                            @endforeach
+
+                                            @else 
+                                            
+                                            <span class="dropdown-item">No attributes found</span>
+
+                                        @endif
+
+                                      </div>
+                                    </div>
+               
+                                    @elseif(isset($param['data']['type']) && $param['data']['type'] === 'elequent-collection')
+
+                                        <button type="button" class="btn btn-info btn-sm view_data_param" maileclipse-data-toggle="tooltip" data-placement="top" title="Elequent Collection" param-key="{{ $param['key'] }}">
+                                        <i class="fa fa-table mr-1" aria-hidden="true"></i>{{ $param['key'] }}
+                                        </button>
+
+                                    @elseif(isset($param['data']['type']) && $param['data']['type'] === 'collection')
+
+                                        <button type="button" class="btn btn-success btn-sm view_data_param" maileclipse-data-toggle="tooltip" data-placement="top" title="Collection" param-key="{{ $param['key'] }}">
+                                        <i class="fa fa-table mr-1" aria-hidden="true"></i>{{ $param['key'] }}
+                                        </button>
+
+                                    @else
+
+                                        <button type="button" class="btn btn-secondary btn-sm view_data_param" maileclipse-data-toggle="tooltip" data-placement="top" title="Simple Variable" param-key="{{ $param['key'] }}">
+                                        <i class="fa fa-anchor mr-1" aria-hidden="true"></i>{{ $param['key'] }}
+                                        </button>
+
+                                    @endif
+
+                            @endforeach
                         </div>
                         <textarea id="template_editor" cols="30" rows="10">{{ $templateData['template'] }}</textarea>
                       </div>
@@ -265,7 +307,7 @@ var templateID = "template_view_{{ $name }}_{{ $templateData['template_name'] }}
             $.ajax({
                   method: "POST",
                   url: "{{ route('previewMarkdownView') }}",
-                  data: { markdown: plainText, namespace: '{{ addslashes($templateData['namespace']) }}', viewdata: "{{ serialize($templateData['view_data']) }}", name: '{{ $name }}' }
+                  data: { markdown: plainText, namespace: '{{ addslashes($templateData['namespace']) }}', viewdata: "{{ preg_replace("/\r\n/","<br />", serialize($templateData['view_data'])) }}", name: '{{ $name }}' }
                 
             }).done(function( HtmledTemplate ) {
                 preview.innerHTML = HtmledTemplate;
@@ -418,7 +460,7 @@ var templateID = "template_view_{{ $name }}_{{ $templateData['template_name'] }}
           data: { 
             markdown: plainText, 
             namespace: '{{ addslashes($templateData['namespace']) }}', 
-            viewdata: "{{ serialize($templateData['view_data']) }}", 
+            viewdata: "{{ preg_replace("/\r\n/","<br />", serialize($templateData['view_data'])) }}", 
             name: '{{ $name }}' 
           }
         
@@ -436,9 +478,14 @@ var templateID = "template_view_{{ $name }}_{{ $templateData['template_name'] }}
             var cm = simplemde.codemirror;
             var output = '';
             var selectedText = cm.getSelection();
-            var param = $(this).text();
+            var param = $(this).attr('param-key');
 
             output = `\{\{ $` + param + ` \}\}`;
+
+            if ( $(this).hasClass('is-attribute') ){
+
+                var output = `\{\{ $` + $(this).attr('param-parent-key') + '->' + param + ` \}\}`;
+            }
 
             cm.replaceSelection(output);
         });
@@ -450,10 +497,11 @@ selector: "textarea#template_editor",
 menubar : false,
 visual: false,
 height:560,
+inline_styles : true,
 plugins: [
      "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
      "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-     "save table directionality emoticons template paste fullpage code"
+     "save table directionality emoticons template paste fullpage code legacyoutput"
 ],
 content_css: "css/content.css",
 toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image fullpage | forecolor backcolor emoticons | preview | code",
@@ -482,8 +530,14 @@ simplemde = null;
 
 
 $('.view_data_param').click(function(){
-    var param = $(this).text();
-    var output = `\{\{ $` + param + ` \}\}`;
+    var param = $(this).attr('param-key');
+    output = `\{\{ $` + param + ` \}\}`;
+
+    if ( $(this).hasClass('is-attribute') ){
+
+        var output = `\{\{ $` + $(this).attr('param-parent-key') + '->' + param + ` \}\}`;
+    }
+    
     tinymce.activeEditor.selection.setContent(output);
 });
 

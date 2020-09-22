@@ -14,7 +14,7 @@ class mailEclipseServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::middlewareGroup('maileclipse', config('maileclipse.middleware', []));
+        Route::middlewareGroup('maileclipse', config('maileclipse.middlewares', []));
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'maileclipse');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'maileclipse');
@@ -25,7 +25,7 @@ class mailEclipseServiceProvider extends ServiceProvider
             $this->bootForConsole();
         }
     }
-    
+
     /**
      * Register the package routes.
      *
@@ -65,7 +65,6 @@ class mailEclipseServiceProvider extends ServiceProvider
         $this->app->singleton('maileclipse', function ($app) {
             return new mailEclipse;
         });
-
     }
 
     /**
@@ -77,7 +76,7 @@ class mailEclipseServiceProvider extends ServiceProvider
     {
         return ['maileclipse'];
     }
-    
+
     /**
      * Console-specific booting.
      *
@@ -91,12 +90,11 @@ class mailEclipseServiceProvider extends ServiceProvider
         ], 'maileclipse.config');
 
         $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/maileclipse'),
-            ], 'public');
+            __DIR__.'/../public' => public_path('vendor/maileclipse'),
+        ], 'public');
 
         $this->publishes([
-                __DIR__.'/../resources/views/templates' => $this->app->resourcePath('views/vendor/maileclipse/templates'),
-            ], 'maileclipse.templates');
-
+            __DIR__.'/../resources/views/templates' => $this->app->resourcePath('views/vendor/maileclipse/templates'),
+        ], 'maileclipse.templates');
     }
 }
